@@ -50,11 +50,11 @@ subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','v_B'
 #############################################################
 #Start with A.B M_A.TA
 
-#On A multiply the masking vector by the data to get (AT.M_A)
+#On A multiply the masking vector by the data to get (AT.v_A)
 #fn(biobank name, masking vector name, data set name, where to store locally, where to copy to remotely) 
 subprocess.call([ds_config.source_dir+"A/mask_M.py",'A','v_A','height.csv',ds_config.temp_dir+'A',ds_config.temp_dir+'B'])
 
-#On B multiply the masked vector by B.M_B, => AT.M_A.B.M_B
+#On B multiply the masked vector by B.v_B, => AT.v_A.B.v_B
 #fn(biobank name, masking vector name, data from A, this data set name, where to store locally, where to copy to remotely)
 subprocess.call([ds_config.source_dir+'B/masked_M1_times_M2.py','B', 'v_B','height.csv.v_A','weight.csv',ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
 #execfile("b/masked_a_times_b.py")
@@ -87,6 +87,13 @@ subprocess.call([ds_config.source_dir+'B/MTM.py','B','weight.csv',ds_config.temp
 
 
 #############################################################
+#Unmask everything on the client
+#############################################################
+subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.height.csv.v_A.weight.csv','half_unmasked.csv',ds_config.temp_dir+'client'])
+subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','half_unmasked.csv','A.B.unmasked.csv',ds_config.temp_dir+'client'])
+
+
+#############################################################
 #Put it all together
 #Really should get R scripts to output JSON
 #############################################################
@@ -109,9 +116,10 @@ bb_value=bb_value.rstrip()
 bb_file.close
 
 #BA
-ba_file=open("../temp/client/v_B.height.csv.v_A.weight.csv")
-ba_value=ab_file.read()
-ba_value=ab_value.rstrip()
+#ba_file=open("../temp/client/v_B.height.csv.v_A.weight.csv")
+ba_file=open("../temp/client/A.B.unmasked.csv")
+ba_value=ba_file.read()
+ba_value=ba_value.rstrip()
 ba_file.close
 
 print "| "+aa_value+" | "+ab_value+" |"
