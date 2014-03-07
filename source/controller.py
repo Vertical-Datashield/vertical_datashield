@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 #Olly Butters
-#28/2/14
+#7/3/14
 
 
 #Main controller for the whole thing.
@@ -13,13 +13,25 @@
 
 
 import os
+import shutil
 import subprocess
-#import numpy
 
 import ds_config
 
 print "\n###############################"
 print "Starting vertical datashield(!)\n"
+
+#Get rid of the temp dir if it exists
+if (os.path.exists('../temp') == True):
+    shutil.rmtree('../temp')
+
+#Make the temp dir and its sub dirs.
+os.mkdir('../temp')
+os.mkdir('../temp/A')
+os.mkdir('../temp/B')
+os.mkdir('../temp/client')
+
+
 
 #Top level root directory
 print ds_config.root_dir
@@ -28,10 +40,12 @@ print ds_config.data_dir
 print ds_config.temp_dir
 print '\n'
 
+#############################################################
 #Generate masking vector (M_A). This will copy to A. Do the same for M_B too.
 #fn(masking_vector_name, where to store locally, where to copy to remotely)
 subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','M_A',ds_config.temp_dir+'client',ds_config.temp_dir+'A'])
 subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','M_B',ds_config.temp_dir+'client',ds_config.temp_dir+'B'])
+
 
 #############################################################
 #Start with A.B M_A.TA
@@ -45,6 +59,7 @@ subprocess.call([ds_config.source_dir+"A/mask_M.py",'A','M_A','height.csv',ds_co
 subprocess.call([ds_config.source_dir+'B/masked_M1_times_M2.py','B', 'M_B','height.csv.M_A','weight.csv',ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
 #execfile("b/masked_a_times_b.py")
 #############################################################
+
 
 #############################################################
 #Do B.A now
@@ -86,7 +101,6 @@ ab_file=open("../temp/client/M_A.weight.csv.M_B.height.csv")
 ab_value=ab_file.read()
 ab_value=ab_value.rstrip()
 ab_file.close
-
 
 #BB
 bb_file=open("../temp/client/weight.csv.weight.csv")
