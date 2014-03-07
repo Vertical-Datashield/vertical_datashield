@@ -119,7 +119,8 @@ bb_file.close
 #ba_file=open("../temp/client/v_B.height.csv.v_A.weight.csv")
 ba_file=open("../temp/client/A.B.unmasked.csv")
 ba_value=ba_file.read()
-ba_value=ba_value.rstrip()
+ba_value=ba
+_value.rstrip()
 ba_file.close
 
 print "| "+aa_value+" | "+ab_value+" |"
