@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+
 #This runs on M2
 #Take the masked value of M1 and multiply by M2
 

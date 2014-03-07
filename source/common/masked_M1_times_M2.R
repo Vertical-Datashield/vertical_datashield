@@ -1,11 +1,13 @@
-#! /usr/bin/env Rscript
-
 #####
 #To generate A.B
 # ma_at * b
 #####
+
 ##########################################
-# these arguments to be read in from elsewhere e.g. fn_a_in <- commandArgs(7)
+#Read in the arguements. Im expecting
+#This data matrix path
+#Other data - already masked path
+#Output location path
 ##########################################
 args <- commandArgs(TRUE)
 
