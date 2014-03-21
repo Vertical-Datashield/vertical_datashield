@@ -24,7 +24,10 @@ print "Saving to: "+unmasked_data_path_local
 
 #Run the R script to mask M
 #fn(masking vector path, data set path, output path)
-cmd = 'Rscript '+ds_config.source_dir+biobank_name+'/unmask_M.R '+ds_config.temp_dir+'/'+biobank_name+'/'+masking_vector_name+' '+ds_config.temp_dir+'/'+biobank_name+'/'+masked_data_set_name+' '+unmasked_data_path_local
+cmd = 'Rscript '+ds_config.source_dir+biobank_name+'/unmask_M.R '
+cmd += ds_config.temp_dir+biobank_name+'/'+masking_vector_name+' '
+cmd += ds_config.temp_dir+biobank_name+'/'+masked_data_set_name+' '
+cmd += unmasked_data_path_local
 os.system(cmd)
 
 print "Finished UNmasking "+masked_data_set_name+"\n"

@@ -8,20 +8,24 @@
 ##########################################
 args <- commandArgs(TRUE)
 
-matrix_in=args[1]
-matrix_out=args[2]
+masking_vector_in=args[1]
+matrix_in=args[2]
+matrix_out=args[3]
 
 ###########################################
 #read files in
 ###########################################
 a<-as.matrix(read.csv(matrix_in, header=TRUE))
+v_m<-as.matrix(read.csv(masking_vector_in, header=TRUE))
+
 
 ###########################################
 #product at * a
 ###########################################
 ata<-t(a)%*%a
+masked_ata <- ata%*%v_m
 
 ###########################################
 # write AMa to file somewhere
 ###########################################
-write.table(ata, row.names=FALSE, col.names=FALSE, sep=",", file = matrix_out)
+write.table(masked_ata, row.names=FALSE, col.names=FALSE, sep=",", file = matrix_out)
