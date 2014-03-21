@@ -12,7 +12,9 @@ output=args[1]
 ###########################################
 # create mask and write to the output file
 ###########################################
-mask <- runif(1, 1, 10)
+#n, min, max
+mask <- runif(1, 1, 1)
+#mask <- runif(1, 1, 10)
 write.table(mask, row.names=FALSE, sep=",", file = output)
 
 
