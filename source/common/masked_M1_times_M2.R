@@ -21,14 +21,14 @@ fn_ma_atb_out=args[4]
 #read files in
 ###########################################
 
-b<-as.matrix(read.csv(fn_b_in, header=TRUE))
-ma_at<-read.csv(fn_ma_at_in, header=TRUE)
+b<-as.matrix(read.csv(fn_b_in, header=FALSE))
+ma_at<-as.matrix(read.csv(fn_ma_at_in, header=FALSE))
 
 ###########################################
 #product at * a
 #product ma * ata
 ###########################################
-ma_atb<-ma_at*b
+ma_atb<-ma_at%*%b
 
 #print(ma_atb)
 

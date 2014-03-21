@@ -52,7 +52,7 @@ subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','v_B'
 
 #On A multiply the masking vector by the data to get (AT.v_A)
 #fn(biobank name, masking vector name, data set name, where to store locally, where to copy to remotely) 
-subprocess.call([ds_config.source_dir+"A/mask_M.py",'A','v_A','height.csv',ds_config.temp_dir+'A',ds_config.temp_dir+'B'])
+subprocess.call([ds_config.source_dir+"A/mask_MT.py",'A','v_A','height.csv',ds_config.temp_dir+'A',ds_config.temp_dir+'B'])
 
 #On B multiply the masked vector by B.v_B, => AT.v_A.B.v_B
 #fn(biobank name, masking vector name, data from A, this data set name, where to store locally, where to copy to remotely)
@@ -66,7 +66,7 @@ subprocess.call([ds_config.source_dir+'B/masked_M1_times_M2.py','B', 'v_B','heig
 #############################################################
 #On B multiply the masking vector by the data to get (BT.M_B)
 #fn(biobank name, masking vector name, data set name, where to store locally, where to copy to remotely) 
-subprocess.call([ds_config.source_dir+'B/mask_M.py','B','v_B','weight.csv',ds_config.temp_dir+'B',ds_config.temp_dir+'A'])
+subprocess.call([ds_config.source_dir+'B/mask_MT.py','B','v_B','weight.csv',ds_config.temp_dir+'B',ds_config.temp_dir+'A'])
 
 #On A multiply the masked vector by A.M_A, => AT.M_A.B.M_B
 #fn(biobank name, masking vector name, data from A, this data set name, where to store locally, where to copy to remotely)

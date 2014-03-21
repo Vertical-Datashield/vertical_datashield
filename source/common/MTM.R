@@ -23,7 +23,8 @@ v_m<-as.matrix(read.csv(masking_vector_in, header=TRUE))
 #product at * a
 ###########################################
 ata<-t(a)%*%a
-masked_ata <- ata%*%v_m
+
+masked_ata <- v_m%*%ata
 
 ###########################################
 # write AMa to file somewhere

@@ -28,7 +28,8 @@ print (ma)
 #solve it
 ###########################################
 #ama<-t(a) * ma
-unmasked_matrix=solve(a,ma)
+unmasked_matrix<-solve(as.matrix(ma)) %*% as.matrix(a)
+
 
 print (unmasked_matrix)
 
