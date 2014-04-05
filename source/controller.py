@@ -90,6 +90,11 @@ subprocess.call([ds_config.source_dir+'A/MTM.py','A','v_A',data_A,ds_config.temp
 #############################################################
 subprocess.call([ds_config.source_dir+'B/MTM.py','B','v_B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
 
+#############################################################
+#Get the sum of each column
+#############################################################
+subprocess.call([ds_config.source_dir+'A/sum_M.py','A',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
+subprocess.call([ds_config.source_dir+'B/sum_M.py','B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
 
 
 #############################################################
