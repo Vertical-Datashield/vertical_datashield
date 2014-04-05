@@ -119,6 +119,8 @@ subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.'
 #subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.weight.csv.weight.csv','weight_weight_unmasked.csv',ds_config.temp_dir+'client'])
 
 
+print "Bind all the stuff together"
+os.system('Rscript client/build_covariance.R')
 
 #############################################################
 #Put it all together
