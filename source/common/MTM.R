@@ -15,8 +15,8 @@ matrix_out=args[3]
 ###########################################
 #read files in
 ###########################################
-a<-as.matrix(read.csv(matrix_in, header=TRUE))
-v_m<-as.matrix(read.csv(masking_vector_in, header=TRUE))
+a<-as.matrix(read.csv(matrix_in, header=FALSE))
+v_m<-as.matrix(read.csv(masking_vector_in, header=FALSE))
 
 
 ###########################################

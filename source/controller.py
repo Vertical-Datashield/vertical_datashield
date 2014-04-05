@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 #Olly Butters
-#21/3/14
+#5/4/14
 
 
 #Main controller for the whole thing.
@@ -19,8 +19,8 @@ import subprocess
 import ds_config
 
 #Define the dataset names
-data_A='height.csv'
-data_B='weight.csv'
+data_A='height_2.csv'
+data_B='weight_2.csv'
 
 
 print "\n###############################"
@@ -122,27 +122,27 @@ subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.'
 #AA
 aa_file=open("../temp/client/A.A.unmasked.csv")
 aa_value=aa_file.read()
-aa_value=aa_value.rstrip()
+#aa_value=aa_value.rstrip()
 aa_file.close
 
 #AB
 #ab_file=open("../temp/client/v_A.weight.csv.v_B.height.csv")
 ab_file=open("../temp/client/A.B.unmasked.csv")
 ab_value=ab_file.read()
-ab_value=ab_value.rstrip()
+#ab_value=ab_value.rstrip()
 ab_file.close
 
 #BB
 bb_file=open("../temp/client/B.B.unmasked.csv")
 bb_value=bb_file.read()
-bb_value=bb_value.rstrip()
+#bb_value=bb_value.rstrip()
 bb_file.close
 
 #BA
 #ba_file=open("../temp/client/v_B.height.csv.v_A.weight.csv")
 ba_file=open("../temp/client/B.A.unmasked.csv")
 ba_value=ba_file.read()
-ba_value=ba_value.rstrip()
+#ba_value=ba_value.rstrip()
 ba_file.close
 
 print "| "+aa_value+" | "+ab_value+" |"

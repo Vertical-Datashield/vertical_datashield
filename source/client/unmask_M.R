@@ -19,7 +19,7 @@ unmasked_matrix_out=args[3]
 ###########################################
 
 a<-read.csv(data_matrix_in, header=FALSE)
-ma<-read.csv(masking_matrix_in, header=TRUE)
+ma<-read.csv(masking_matrix_in, header=FALSE)
 
 print (a)
 print (ma)

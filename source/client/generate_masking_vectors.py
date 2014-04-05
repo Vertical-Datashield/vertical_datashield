@@ -25,7 +25,7 @@ print "Saving to: " + masking_vector_path_client
 
 
 #Run the R script to make the masking vectors
-cmd = 'Rscript '+ds_config.source_dir+'client/generate_masking_vector.R '+masking_vector_path_client
+cmd = 'Rscript '+ds_config.source_dir+'client/generate_masking_vector.R '+masking_vector_path_client+' 2'
 os.system(cmd)
 
 #Build location where this will get saved remotely
