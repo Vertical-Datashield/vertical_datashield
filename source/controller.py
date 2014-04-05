@@ -18,6 +18,11 @@ import subprocess
 
 import ds_config
 
+#Define the dataset names
+data_A='height.csv'
+data_B='weight.csv'
+
+
 print "\n###############################"
 print "Starting vertical datashield(!)\n"
 
@@ -52,12 +57,11 @@ subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','v_B'
 
 #On A multiply the masking vector by the data to get (AT.v_A)
 #fn(biobank name, masking vector name, data set name, where to store locally, where to copy to remotely) 
-subprocess.call([ds_config.source_dir+"A/mask_MT.py",'A','v_A','height.csv',ds_config.temp_dir+'A',ds_config.temp_dir+'B'])
+subprocess.call([ds_config.source_dir+"A/mask_MT.py",'A','v_A',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'B'])
 
 #On B multiply the masked vector by B.v_B, => AT.v_A.B.v_B
 #fn(biobank name, masking vector name, data from A, this data set name, where to store locally, where to copy to remotely)
-subprocess.call([ds_config.source_dir+'B/masked_M1_times_M2.py','B', 'v_B','height.csv.v_A','weight.csv',ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
-#execfile("b/masked_a_times_b.py")
+subprocess.call([ds_config.source_dir+'B/masked_M1_times_M2.py','B', 'v_B',data_A+'.v_A',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
 #############################################################
 
 
@@ -66,24 +70,25 @@ subprocess.call([ds_config.source_dir+'B/masked_M1_times_M2.py','B', 'v_B','heig
 #############################################################
 #On B multiply the masking vector by the data to get (BT.M_B)
 #fn(biobank name, masking vector name, data set name, where to store locally, where to copy to remotely) 
-subprocess.call([ds_config.source_dir+'B/mask_MT.py','B','v_B','weight.csv',ds_config.temp_dir+'B',ds_config.temp_dir+'A'])
+subprocess.call([ds_config.source_dir+'B/mask_MT.py','B','v_B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'A'])
 
 #On A multiply the masked vector by A.M_A, => AT.M_A.B.M_B
 #fn(biobank name, masking vector name, data from A, this data set name, where to store locally, where to copy to remotely)
-subprocess.call([ds_config.source_dir+'A/masked_M1_times_M2.py','A', 'v_A','weight.csv.v_B','height.csv',ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
+subprocess.call([ds_config.source_dir+'A/masked_M1_times_M2.py','A', 'v_A',data_B+'.v_B',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'A/masked_M1_times_M2.py','A', 'v_A','weight.csv.v_B',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
 
 
 #############################################################
 #Get ATA masked.
 #############################################################
 #fn(biobank name, masking vector name, data set name, where to store locally, where to copy to remotely)
-subprocess.call([ds_config.source_dir+'A/MTM.py','A','v_A','height.csv',ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
+subprocess.call([ds_config.source_dir+'A/MTM.py','A','v_A',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
 
 
 #############################################################
 #Get BTB masked.
 #############################################################
-subprocess.call([ds_config.source_dir+'B/MTM.py','B','v_B','weight.csv',ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
+subprocess.call([ds_config.source_dir+'B/MTM.py','B','v_B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
 
 
 
@@ -91,18 +96,22 @@ subprocess.call([ds_config.source_dir+'B/MTM.py','B','v_B','weight.csv',ds_confi
 #Unmask everything on the client
 #############################################################
 #height-weight first
-subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.height.csv.v_A.weight.csv','half_unmasked.csv',ds_config.temp_dir+'client'])
+subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.'+data_A+'.v_A.'+data_B,'half_unmasked.csv',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.height.csv.v_A.weight.csv','half_unmasked.csv',ds_config.temp_dir+'client'])
 subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','half_unmasked.csv','A.B.unmasked.csv',ds_config.temp_dir+'client'])
 
 #weight-height now
-subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.weight.csv.v_B.height.csv','half_unmasked.csv',ds_config.temp_dir+'client'])
+subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.'+data_B+'.v_B.'+data_A,'half_unmasked.csv',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.weight.csv.v_B.height.csv','half_unmasked.csv',ds_config.temp_dir+'client'])
 subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','half_unmasked.csv','B.A.unmasked.csv',ds_config.temp_dir+'client'])
 
 #height-height
-subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.height.csv.height.csv','height_height_unmasked.csv',ds_config.temp_dir+'client'])
+subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.'+data_A+'.'+data_A,'A.A.unmasked.csv',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.height.csv.height.csv','height_height_unmasked.csv',ds_config.temp_dir+'client'])
 
 #weight-weight
-subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.weight.csv.weight.csv','weight_weight_unmasked.csv',ds_config.temp_dir+'client'])
+subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.'+data_B+'.'+data_B,'B.B.unmasked.csv',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.weight.csv.weight.csv','weight_weight_unmasked.csv',ds_config.temp_dir+'client'])
 
 
 
@@ -111,7 +120,7 @@ subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.w
 #Really should get R scripts to output JSON
 #############################################################
 #AA
-aa_file=open("../temp/client/height_height_unmasked.csv")
+aa_file=open("../temp/client/A.A.unmasked.csv")
 aa_value=aa_file.read()
 aa_value=aa_value.rstrip()
 aa_file.close
@@ -124,7 +133,7 @@ ab_value=ab_value.rstrip()
 ab_file.close
 
 #BB
-bb_file=open("../temp/client/weight_weight_unmasked.csv")
+bb_file=open("../temp/client/B.B.unmasked.csv")
 bb_value=bb_file.read()
 bb_value=bb_value.rstrip()
 bb_file.close
