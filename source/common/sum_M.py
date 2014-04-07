@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-#Take a matrix (M) and multiply it by its transpose.
+#Figure out the sum of each column
 #Not masked.
 
 import os
@@ -12,25 +12,34 @@ import ds_config
 #Get the params
 biobank_name = sys.argv[1]
 data_set_name = sys.argv[2]
-MTM_location_local = sys.argv[3]
-MTM_location_remote = sys.argv[4]
+sum_M_location_local = sys.argv[3]
+sum_M_location_remote = sys.argv[4]
 
 print "Summing "+data_set_name
 
 #Build file paths
-MTM_data_path_local  = MTM_location_local+ '/sum.'+data_set_name
-MTM_data_path_remote = MTM_location_remote+'/sum.'+data_set_name
-print "Saving to: "+MTM_data_path_local
+sum_M_data_path_local  = sum_M_location_local+ '/sum.'+data_set_name
+sum_M_data_path_remote = sum_M_location_remote+'/sum.'+data_set_name
+print "Saving to: "+sum_M_data_path_local
 
 #Run the R script to mask A
 cmd = 'Rscript '+biobank_name+'/sum_M.R '
 cmd += ds_config.data_dir+biobank_name+'/'+data_set_name+' '
-cmd += MTM_data_path_local
+cmd += sum_M_data_path_local
 os.system(cmd)
 
 
 #Copy files to data dirs
-print "Copying to: "+MTM_data_path_remote
-shutil.copyfile(MTM_data_path_local,MTM_data_path_remote)
+#print "Copying to: "+sum_M_data_path_remote
+#shutil.copyfile(sum_M_data_path_local,sum_M_data_path_remote)
+
+if ds_config.local_only == True:
+    #Copy file to data dir
+    print "Copying to: "+sum_M_data_path_remote
+    shutil.copyfile(sum_M_data_path_local,sum_M_data_path_remote)
+else:
+    #Copy the data to the remote client
+    cmd = 'scp '+sum_M_data_path_local+' '+ds_config.remote_settings['client','username']+'@'+ds_config.remote_settings['client','ip_address']+':'+sum_M_data_path_remote
+    print cmd
 
 print "Finished summing "+data_set_name+"\n"

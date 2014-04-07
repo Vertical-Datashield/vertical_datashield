@@ -33,7 +33,19 @@ os.system(cmd)
 
 
 #Copy files to data dirs
-print "Copying to: "+masked_data_path_remote
-shutil.copyfile(masked_data_path_local,masked_data_path_remote)
+#print "Copying to: "+masked_data_path_remote
+#shutil.copyfile(masked_data_path_local,masked_data_path_remote)
+
+
+if ds_config.local_only == True:
+    #Copy file to data dir
+    print "Copying to: "+masked_data_path_remote
+    shutil.copyfile(masked_data_path_local,masked_data_path_remote)
+else:
+    #Do something
+    print "DEFINATELY WRONG!"
+    cmd = 'scp '+masking_vector_path_client+' '+ds_config.remote_settings[biobank_name,'username']+'@'+ds_config.remote_settings[biobank_name,'ip_address']+':'+masking_vector_path_remote
+    print cmd
+
 
 print "Finished masking "+data_set_name+"\n"

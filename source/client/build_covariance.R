@@ -43,7 +43,7 @@ ba.bb<-cbind(b.a, b.b)
 #Join the rows. We are putting the sums at the top.
 cov.matrix<-rbind(sums,aa.ab, ba.bb)
 
-print(cov.matrix)
+#print(cov.matrix)
 
 #Add the sums to the front col
 #stick a value in the first element
@@ -91,12 +91,12 @@ print(cov.matrix)
 
   X<-solve(xtx)
   Y<-cov.matrix[yrow,c(sumscol,ycol)]
-print(X)
-print(Y)
+#print(X)
+#print(Y)
 
-class(cov.matrix)
-class(X)
-class(Y)
+#class(cov.matrix)
+#class(X)
+#class(Y)
 
 coeff<-X %*% Y
   print(coeff)

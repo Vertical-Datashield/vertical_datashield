@@ -48,8 +48,8 @@ print '\n'
 #############################################################
 #Generate masking vector (v_A). This will copy to A. Do the same for v_B too.
 #fn(masking_vector_name, where to store locally, where to copy to remotely)
-subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','v_A',ds_config.temp_dir+'client',ds_config.temp_dir+'A'])
-subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','v_B',ds_config.temp_dir+'client',ds_config.temp_dir+'B'])
+subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','A','v_A',ds_config.temp_dir+'client',ds_config.temp_dir+'A'])
+subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','B','v_B',ds_config.temp_dir+'client',ds_config.temp_dir+'B'])
 
 
 #############################################################
@@ -127,33 +127,27 @@ os.system('Rscript client/build_covariance.R')
 #Really should get R scripts to output JSON
 #############################################################
 #AA
-aa_file=open("../temp/client/A.A.unmasked.csv")
-aa_value=aa_file.read()
-#aa_value=aa_value.rstrip()
-aa_file.close
+#aa_file=open("../temp/client/A.A.unmasked.csv")
+#aa_value=aa_file.read()
+#aa_file.close
 
 #AB
-#ab_file=open("../temp/client/v_A.weight.csv.v_B.height.csv")
-ab_file=open("../temp/client/A.B.unmasked.csv")
-ab_value=ab_file.read()
-#ab_value=ab_value.rstrip()
-ab_file.close
+#ab_file=open("../temp/client/A.B.unmasked.csv")
+#ab_value=ab_file.read()
+#ab_file.close
 
 #BB
-bb_file=open("../temp/client/B.B.unmasked.csv")
-bb_value=bb_file.read()
-#bb_value=bb_value.rstrip()
-bb_file.close
+#bb_file=open("../temp/client/B.B.unmasked.csv")
+#bb_value=bb_file.read()
+#bb_file.close
 
 #BA
-#ba_file=open("../temp/client/v_B.height.csv.v_A.weight.csv")
-ba_file=open("../temp/client/B.A.unmasked.csv")
-ba_value=ba_file.read()
-#ba_value=ba_value.rstrip()
-ba_file.close
+#ba_file=open("../temp/client/B.A.unmasked.csv")
+#ba_value=ba_file.read()
+#ba_file.close
 
-print "| "+aa_value+" | "+ab_value+" |"
-print "| "+ba_value+" | "+bb_value+" |"
+#print "| "+aa_value+" | "+ab_value+" |"
+#print "| "+ba_value+" | "+bb_value+" |"
 
 
 
