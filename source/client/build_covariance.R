@@ -33,39 +33,73 @@ sum.b<-read.csv('../temp/client/sum.weight_2.csv', header=FALSE)
 #Join them all up
 ###########################################
 
-sums <- rbind(sum.a, sum.b)
+#Get the sums together in a vector
+sums <- c(t(sum.a), t(sum.b))
 
+#Join the various parts for the main matrix in columns
 aa.ab<-cbind(a.a, a.b)
 ba.bb<-cbind(b.a, b.b)
 
-cov.matrix<-rbind(aa.ab, ba.bb)
+#Join the rows. We are putting the sums at the top.
+cov.matrix<-rbind(sums,aa.ab, ba.bb)
+
+print(cov.matrix)
 
 #Add the sums to the front col
-cov.matrix <- cbind(sums,cov.matrix)
+#stick a value in the first element
+temp <- c(1,sums)
+cov.matrix <- cbind(temp, cov.matrix)
 
-#Add the sums to the 
-#sums <- t(sums)
-temp <- cbind(1,t(sum.a),t(sum.b))
-#print(sums)
-print(temp)
-#sums <- unname(sums)
-#cov.matrix <- unname(cov.matrix)
-unname(temp)
-unname(cov.matrix)
-cov.matrix <- rbind(temp, cov.matrix)
+#rename stuff. This is a major hack.
+columnname=c("sums","weight.c","age.c","ht.c","bmi.c")
+rowname=c("sums","weight.c","age.c","ht.c","bmi.c")
+colnames(cov.matrix) <- columnname
+rownames(cov.matrix) <- rowname
 
+cov.matrix=as.matrix(cov.matrix)
 
-
-#cov.matrix<-rbind(t(sums),aa.ab, ba.bb)
-#cov.matrix<-cbind(sumscol,cov.matrix)
-#rownames(cov.matrix)[1]<-"sums"
-#colnames(cov.matrix)[1]<-"sums"
-
+print(cov.matrix)
 
 ###########################################
 # write AMa to file somewhere
 ###########################################
 #write.table(ama, row.names=FALSE, sep=",", file = output_ama)
-write.table(cov.matrix, row.names=FALSE, col.names=FALSE, sep=",", file = 'covariance_out.csv')
+#write.table(cov.matrix, row.names=FALSE, col.names=FALSE, sep=",", file = 'covariance_out.csv')
 
 
+#ds.glm<-function(y,x){
+  x<-"ht.c"
+  y<-"weight.c"
+
+  const<-"sums"
+
+  sumsrow<-which(rownames(cov.matrix) == const)
+  sumscol<-which(colnames(cov.matrix) == const)
+  ycol<-which(colnames(cov.matrix) == y)
+  yrow<-which(rownames(cov.matrix) == y)
+  xcol<-which(colnames(cov.matrix) == x)
+  xrow<-which(rownames(cov.matrix) == x)
+
+  sums1<-cov.matrix[sumsrow,c(sumscol,xcol)]
+  xrows<-cov.matrix[xrow,c(sumscol,xcol)]
+  Y<-cov.matrix[yrow,c(sumscol,ycol)]
+
+  xtx<-rbind(sums1, xrows)
+  rownames(xtx)<-c(const, x)
+
+
+
+  X<-solve(xtx)
+  Y<-cov.matrix[yrow,c(sumscol,ycol)]
+print(X)
+print(Y)
+
+class(cov.matrix)
+class(X)
+class(Y)
+
+coeff<-X %*% Y
+  print(coeff)
+#}
+
+#ds.glm("weight.c", "ht.c")
