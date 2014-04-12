@@ -10,7 +10,7 @@ data_dir=root_dir+"/data/"
 temp_dir=root_dir+"/temp/"
 
 #Flag to decide if copy things locally or remotely. True/False
-local_only=True
+local_only=False
 
 #Some settings of remote hosts. Only used if local_only=False
 remote_settings = {}

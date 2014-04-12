@@ -43,5 +43,7 @@ else:
     print "else"
     cmd = 'scp '+masking_vector_path_client+' '+ds_config.remote_settings[biobank_name,'username']+'@'+ds_config.remote_settings[biobank_name,'ip_address']+':'+masking_vector_path_remote
     print cmd
+    os.system(cmd)
+
 
 print "Finished generating masking vector\n"

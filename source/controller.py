@@ -51,6 +51,7 @@ print '\n'
 subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','A','v_A',ds_config.temp_dir+'client',ds_config.temp_dir+'A'])
 subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','B','v_B',ds_config.temp_dir+'client',ds_config.temp_dir+'B'])
 
+exit(0)
 
 #############################################################
 #Start with A.B M_A.TA
