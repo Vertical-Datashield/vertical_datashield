@@ -39,11 +39,10 @@ if ds_config.local_only == True:
     print "Copying to: "+masked_data_path_remote
     shutil.copyfile(masked_data_path_local,masked_data_path_remote)
 else:
-    #Do something                                                                                                                                                   
-    print "else"
+    #Do something
     cmd = 'scp '+masked_data_path_local+' '+ds_config.remote_settings['client','username']+'@'+ds_config.remote_settings['client','ip_address']+':'+masked_data_path_remote
     print cmd
-
+    os.system(cmd)
 
 
 print 'Finished masking '+masking_vector_name+'.'+data_from_M1+'.'+data_set_name+'\n'
