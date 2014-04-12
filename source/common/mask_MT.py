@@ -19,15 +19,16 @@ masked_location_remote = sys.argv[5]
 print "Masking "+data_set_name+" with "+masking_vector_name
 
 #Build file paths
-masked_data_path_local  = masked_location_local+ '/'+data_set_name+'.'+masking_vector_name
-masked_data_path_remote = masked_location_remote+'/'+data_set_name+'.'+masking_vector_name
+masked_data_path_local  = ds_config.temp_dir+masked_location_local+ '/'+data_set_name+'.'+masking_vector_name
+masked_data_path_remote = ds_config.temp_dir+masked_location_remote+'/'+data_set_name+'.'+masking_vector_name
 print "Saving to: "+masked_data_path_local
 
 #Run the R script to mask M
 #fn(masking vector path, data set path, output path)
 cmd = 'Rscript '+ds_config.source_dir+biobank_name+'/mask_MT.R '
-cmd += ds_config.temp_dir+'/'+biobank_name+'/'+masking_vector_name+' '
-cmd += ds_config.data_dir+'/'+biobank_name+'/'+data_set_name+' '
+cmd += ds_config.temp_dir+biobank_name+'/'+masking_vector_name+' '
+cmd += ds_config.data_dir+
+biobank_name+'/'+data_set_name+' '
 cmd += masked_data_path_local
 os.system(cmd)
 
