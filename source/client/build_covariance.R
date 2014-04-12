@@ -29,7 +29,7 @@ b.b<-read.csv('../temp/client/B.B.unmasked.csv', header=FALSE)
 sum.a<-read.csv('../temp/client/sum.height_2.csv', header=FALSE)
 sum.b<-read.csv('../temp/client/sum.weight_2.csv', header=FALSE)
 
-numrows<-read.csv('../temp/client/numrows.weight_2.csv', header=FALSE)
+numrows<-as.numeric(read.csv('../temp/client/numrows.weight_2.csv', header=FALSE))
 
 ###########################################
 #Join them all up
@@ -61,6 +61,8 @@ rownames(cov.matrix) <- rowname
 cov.matrix=as.matrix(cov.matrix)
 
 print(cov.matrix)
+write.table(cov.matrix, row.names=TRUE, col.names=TRUE, sep=",", file = '../temp/client/covariance_out.csv')
+
 
 ###########################################
 # write AMa to file somewhere
@@ -101,7 +103,7 @@ print(cov.matrix)
 #class(Y)
 
 coeff<-X %*% Y
-  print(coeff)
+#  print(coeff)
 #}
 
 #ds.glm("weight.c", "ht.c")
