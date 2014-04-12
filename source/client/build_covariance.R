@@ -29,6 +29,8 @@ b.b<-read.csv('../temp/client/B.B.unmasked.csv', header=FALSE)
 sum.a<-read.csv('../temp/client/sum.height_2.csv', header=FALSE)
 sum.b<-read.csv('../temp/client/sum.weight_2.csv', header=FALSE)
 
+numrows<-read.csv('../temp/client/numrows.weight_2.csv', header=FALSE)
+
 ###########################################
 #Join them all up
 ###########################################
@@ -47,7 +49,7 @@ cov.matrix<-rbind(sums,aa.ab, ba.bb)
 
 #Add the sums to the front col
 #stick a value in the first element
-temp <- c(1,sums)
+temp <- c(numrows,sums)
 cov.matrix <- cbind(temp, cov.matrix)
 
 #rename stuff. This is a major hack.
