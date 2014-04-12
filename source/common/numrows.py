@@ -18,8 +18,8 @@ sum_M_location_remote = sys.argv[4]
 print "Numrows "+data_set_name
 
 #Build file paths
-sum_M_data_path_local  = sum_M_location_local+ '/numrows.'+data_set_name
-sum_M_data_path_remote = sum_M_location_remote+'/numrows.'+data_set_name
+sum_M_data_path_local  = ds_config.data_dir+sum_M_location_local+ '/numrows.'+data_set_name
+sum_M_data_path_remote = ds_config.data_dir+sum_M_location_remote+'/numrows.'+data_set_name
 print "Saving to: "+sum_M_data_path_local
 
 #Run the R script to mask A
