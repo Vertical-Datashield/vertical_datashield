@@ -23,7 +23,7 @@ sum_M_data_path_remote = sum_M_location_remote+'/numrows.'+data_set_name
 print "Saving to: "+sum_M_data_path_local
 
 #Run the R script to mask A
-cmd = 'Rscript '+biobank_name+'/numrows.R '
+cmd = 'Rscript '+ds_config.source_dir+'common/numrows.R '
 cmd += ds_config.data_dir+biobank_name+'/'+data_set_name+' '
 cmd += sum_M_data_path_local
 os.system(cmd)
