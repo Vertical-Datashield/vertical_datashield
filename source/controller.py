@@ -51,14 +51,24 @@ print '\n'
 subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','A','v_A',ds_config.temp_dir+'client',ds_config.temp_dir+'A'])
 subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','B','v_B',ds_config.temp_dir+'client',ds_config.temp_dir+'B'])
 
-exit(0)
 
 #############################################################
 #Start with A.B M_A.TA
 
 #On A multiply the masking vector by the data to get (AT.v_A)
 #fn(biobank name, masking vector name, data set name, where to store locally, where to copy to remotely) 
-subprocess.call([ds_config.source_dir+"A/mask_MT.py",'A','v_A',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'B'])
+#subprocess.call([ds_config.source_dir+"A/mask_MT.py",'A','v_A',data_A,'A','B'])
+
+cmd = ds_config.source_dir+"A/mask_MT.py A v_A "+data_A+" A B"
+print cmd
+#os.system(cmd)
+
+cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+cmd
+print cmd
+os.system(cmd)
+
+
+exit(0)
 
 #On B multiply the masked vector by B.v_B, => AT.v_A.B.v_B
 #fn(biobank name, masking vector name, data from A, this data set name, where to store locally, where to copy to remotely)
