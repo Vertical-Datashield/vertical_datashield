@@ -40,9 +40,9 @@ if ds_config.local_only == True:
     shutil.copyfile(MTM_data_path_local,MTM_data_path_remote)
 else:
     #Do something
-    print "else"
     cmd = 'scp '+MTM_data_path_local+' '+ds_config.remote_settings['client','username']+'@'+ds_config.remote_settings['client','ip_address']+':'+MTM_data_path_remote
     print cmd
+    os.system(cmd)
 
 
 print "Finished self multiplying "+data_set_name+"\n"
