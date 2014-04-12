@@ -24,7 +24,7 @@ MTM_data_path_remote = ds_config.temp_dir+MTM_location_remote+'/'+masking_vector
 print "Saving to: "+MTM_data_path_local
 
 #Run the R script to mask A
-cmd = 'Rscript '+biobank_name+'/MTM.R '
+cmd = 'Rscript '+ds_config.source_dir+biobank_name+'/MTM.R '
 cmd += ds_config.temp_dir+biobank_name+'/'+masking_vector_name+' '
 cmd += ds_config.data_dir+biobank_name+'/'+data_set_name+' '
 cmd += MTM_data_path_local
