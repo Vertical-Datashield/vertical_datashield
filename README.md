@@ -24,3 +24,8 @@ M_A=matrix from A
 v=masking vector
 m_a=masking vector for A
 T=transpose e.g. AT
+
+Deployment
+
+- On each VM stick the source code
+- Add a temp/A or temp/B to A and B. The client makes this.
