@@ -19,7 +19,7 @@ num_rows_out=args[2]
 
 a<-read.csv(data_matrix_in, header=FALSE)
 
-num_rows <- numrows(a) 
+num_rows <- nrow(a) 
 
 
 #print(sums)
