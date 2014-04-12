@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 #Olly Butters
-#5/4/14
+#12/4/14
 
 
 #Main controller for the whole thing.
@@ -12,9 +12,14 @@
 #T=transpose
 
 
+#A good way to see what is going on is to run
+#watch -d ls -ltr temp/A
+#etc on each VM, then you see the files being made and passed around.
+
 import os
 import shutil
 import subprocess
+import time
 
 import ds_config
 
@@ -26,17 +31,15 @@ data_B='weight_2.csv'
 print "\n###############################"
 print "Starting vertical datashield(!)\n"
 
-#Get rid of the temp dir if it exists
-if (os.path.exists('../temp') == True):
-    shutil.rmtree('../temp')
+#Get rid of the temp dirs if they exist on each VM
+subprocess.call(ds_config.source_dir+'common/tidy_paths.py')
+cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+ds_config.source_dir+'common/tidy_paths.py'
+os.system(cmd)
+cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+ds_config.source_dir+'common/tidy_paths.py'
+os.system(cmd)
 
-#Make the temp dir and its sub dirs.
-os.mkdir('../temp')
-os.mkdir('../temp/A')
-os.mkdir('../temp/B')
-os.mkdir('../temp/client')
-
-
+#have a little nap to let the watch catch up
+time.sleep(4)
 
 #Top level root directory
 print ds_config.root_dir
@@ -70,13 +73,10 @@ os.system(cmd)
 #fn(biobank name, masking vector name, data from A, this data set name, where to store locally, where to copy to remotely)
 #subprocess.call([ds_config.source_dir+'B/masked_M1_times_M2.py','B', 'v_B',data_A+'.v_A',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
 
-remote_cmd = ds_config.source_dir+'B/masked_M1_times_M2.py B v_B '+data_A+' v_A '+data_B+' B client'
+remote_cmd = ds_config.source_dir+'B/masked_M1_times_M2.py B v_B '+data_A+'.v_A '+data_B+' B client'
 cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
 print cmd
 os.system(cmd)
-
-
-exit(0)
 
 #############################################################
 
@@ -86,31 +86,78 @@ exit(0)
 #############################################################
 #On B multiply the masking vector by the data to get (BT.M_B)
 #fn(biobank name, masking vector name, data set name, where to store locally, where to copy to remotely) 
-subprocess.call([ds_config.source_dir+'B/mask_MT.py','B','v_B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'A'])
+#subprocess.call([ds_config.source_dir+'B/mask_MT.py','B','v_B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'A'])
+
+
+remote_cmd = ds_config.source_dir+"B/mask_MT.py B v_B "+data_B+" B A"
+cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
+print cmd
+os.system(cmd)
+
 
 #On A multiply the masked vector by A.M_A, => AT.M_A.B.M_B
 #fn(biobank name, masking vector name, data from A, this data set name, where to store locally, where to copy to remotely)
-subprocess.call([ds_config.source_dir+'A/masked_M1_times_M2.py','A', 'v_A',data_B+'.v_B',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
-#subprocess.call([ds_config.source_dir+'A/masked_M1_times_M2.py','A', 'v_A','weight.csv.v_B',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'A/masked_M1_times_M2.py','A', 'v_A',data_B+'.v_B',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
+
+
+remote_cmd = ds_config.source_dir+'A/masked_M1_times_M2.py A v_A '+data_B+'.v_B '+data_A+' A client'
+cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
+print cmd
+os.system(cmd)
+
+
 
 
 #############################################################
 #Get ATA masked.
 #############################################################
 #fn(biobank name, masking vector name, data set name, where to store locally, where to copy to remotely)
-subprocess.call([ds_config.source_dir+'A/MTM.py','A','v_A',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'A/MTM.py','A','v_A',data_A,'A','client'])
 
+remote_cmd = ds_config.source_dir+'A/MTM.py A v_A '+data_A+' A client'
+cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
+print cmd
+os.system(cmd)
 
 #############################################################
 #Get BTB masked.
 #############################################################
-subprocess.call([ds_config.source_dir+'B/MTM.py','B','v_B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'B/MTM.py','B','v_B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
+
+remote_cmd = ds_config.source_dir+'B/MTM.py B v_B '+data_B+' A client'
+cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
+print cmd
+os.system(cmd)
+
+
 
 #############################################################
 #Get the sum of each column
 #############################################################
-subprocess.call([ds_config.source_dir+'A/sum_M.py','A',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
-subprocess.call([ds_config.source_dir+'B/sum_M.py','B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'A/sum_M.py','A',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'B/sum_M.py','B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
+
+
+remote_cmd = ds_config.source_dir+'A/sum_M.py A '+data_A+' A client'
+cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
+print cmd
+os.system(cmd)
+
+remote_cmd = ds_config.source_dir+'B/sum_M.py B '+data_B+' B client'
+cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
+print cmd
+os.system(cmd)
+
+#Get the number of rows in each
+remote_cmd = ds_config.source_dir+'common/numrows.py A '+data_A+' A client'
+cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
+print cmd
+os.system(cmd)
+
+remote_cmd = ds_config.source_dir+'common/numrows.py B '+data_B+' B client'
+cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
+print cmd
+os.system(cmd)
 
 
 #############################################################
@@ -118,54 +165,21 @@ subprocess.call([ds_config.source_dir+'B/sum_M.py','B',data_B,ds_config.temp_dir
 #############################################################
 #height-weight first
 subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.'+data_A+'.v_A.'+data_B,'half_unmasked.csv',ds_config.temp_dir+'client'])
-#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.height.csv.v_A.weight.csv','half_unmasked.csv',ds_config.temp_dir+'client'])
 subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','half_unmasked.csv','A.B.unmasked.csv',ds_config.temp_dir+'client'])
 
 #weight-height now
 subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.'+data_B+'.v_B.'+data_A,'half_unmasked.csv',ds_config.temp_dir+'client'])
-#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.weight.csv.v_B.height.csv','half_unmasked.csv',ds_config.temp_dir+'client'])
 subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','half_unmasked.csv','B.A.unmasked.csv',ds_config.temp_dir+'client'])
 
 #height-height
 subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.'+data_A+'.'+data_A,'A.A.unmasked.csv',ds_config.temp_dir+'client'])
-#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.height.csv.height.csv','height_height_unmasked.csv',ds_config.temp_dir+'client'])
 
 #weight-weight
 subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.'+data_B+'.'+data_B,'B.B.unmasked.csv',ds_config.temp_dir+'client'])
-#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.weight.csv.weight.csv','weight_weight_unmasked.csv',ds_config.temp_dir+'client'])
 
 
-print "Bind all the stuff together"
+#Bind all the stuff together
 os.system('Rscript client/build_covariance.R')
-
-#############################################################
-#Put it all together
-#Really should get R scripts to output JSON
-#############################################################
-#AA
-#aa_file=open("../temp/client/A.A.unmasked.csv")
-#aa_value=aa_file.read()
-#aa_file.close
-
-#AB
-#ab_file=open("../temp/client/A.B.unmasked.csv")
-#ab_value=ab_file.read()
-#ab_file.close
-
-#BB
-#bb_file=open("../temp/client/B.B.unmasked.csv")
-#bb_value=bb_file.read()
-#bb_file.close
-
-#BA
-#ba_file=open("../temp/client/B.A.unmasked.csv")
-#ba_value=ba_file.read()
-#ba_file.close
-
-#print "| "+aa_value+" | "+ab_value+" |"
-#print "| "+ba_value+" | "+bb_value+" |"
-
-
 
 
 
