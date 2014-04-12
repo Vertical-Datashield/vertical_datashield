@@ -3,6 +3,7 @@
 #get rid of any old temp data sitting around
 
 import os
+import shutil
 
 import ds_config
 
