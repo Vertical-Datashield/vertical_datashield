@@ -41,5 +41,6 @@ else:
     #Copy the data to the remote client
     cmd = 'scp '+sum_M_data_path_local+' '+ds_config.remote_settings['client','username']+'@'+ds_config.remote_settings['client','ip_address']+':'+sum_M_data_path_remote
     print cmd
+    os.system(cmd)
 
 print "Finished numrows "+data_set_name+"\n"
