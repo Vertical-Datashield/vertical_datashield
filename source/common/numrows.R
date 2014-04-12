@@ -10,7 +10,7 @@
 args <- commandArgs(TRUE)
 
 data_matrix_in=args[1]
-sums_out=args[2]
+num_rows_out=args[2]
 
 
 ###########################################
@@ -19,7 +19,7 @@ sums_out=args[2]
 
 a<-read.csv(data_matrix_in, header=FALSE)
 
-sums <- colSums(a) 
+num_rows <- numrows(a) 
 
 
 #print(sums)
@@ -27,6 +27,6 @@ sums <- colSums(a)
 ###########################################
 # write to file somewhere
 ###########################################
-write.table(sums, row.names=FALSE, col.names=FALSE, sep=",", file = sums_out)
+write.table(num_rows, row.names=FALSE, col.names=FALSE, sep=",", file = num_rows_out)
 
 
