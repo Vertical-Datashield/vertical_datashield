@@ -19,12 +19,12 @@ MTM_location_remote = sys.argv[5]
 print "Multiplying "+data_set_name+" by itself"
 
 #Build file paths
-MTM_data_path_local  = ds_config.temp_dir+MTM_location_local+ '/'+masking_vector_name+'.'+data_set_name+'.'+data_set_name
-MTM_data_path_remote = ds_config.temp_dir+MTM_location_remote+'/'+masking_vector_name+'.'+data_set_name+'.'+data_set_name
+MTM_data_path_local  = MTM_location_local+ '/'+masking_vector_name+'.'+data_set_name+'.'+data_set_name
+MTM_data_path_remote = MTM_location_remote+'/'+masking_vector_name+'.'+data_set_name+'.'+data_set_name
 print "Saving to: "+MTM_data_path_local
 
 #Run the R script to mask A
-cmd = 'Rscript '+ds_config.source_dir+biobank_name+'/MTM.R '
+cmd = 'Rscript '+biobank_name+'/MTM.R '
 cmd += ds_config.temp_dir+biobank_name+'/'+masking_vector_name+' '
 cmd += ds_config.data_dir+biobank_name+'/'+data_set_name+' '
 cmd += MTM_data_path_local
@@ -40,9 +40,9 @@ if ds_config.local_only == True:
     shutil.copyfile(MTM_data_path_local,MTM_data_path_remote)
 else:
     #Do something
-    cmd = 'scp '+MTM_data_path_local+' '+ds_config.remote_settings['client','username']+'@'+ds_config.remote_settings['client','ip_address']+':'+MTM_data_path_remote
+    print "else"
+    cmd = 'scp '+MTM_data_path_local+' '+ds_config.remote_settings[biobank_name,'username']+'@'+ds_config.remote_settings[biobank_name,'ip_address']+':'+MTM_data_path_remote
     print cmd
-    os.system(cmd)
 
 
 print "Finished self multiplying "+data_set_name+"\n"

@@ -18,12 +18,12 @@ sum_M_location_remote = sys.argv[4]
 print "Summing "+data_set_name
 
 #Build file paths
-sum_M_data_path_local  = ds_config.temp_dir+sum_M_location_local+ '/sum.'+data_set_name
-sum_M_data_path_remote = ds_config.temp_dir+sum_M_location_remote+'/sum.'+data_set_name
+sum_M_data_path_local  = sum_M_location_local+ '/sum.'+data_set_name
+sum_M_data_path_remote = sum_M_location_remote+'/sum.'+data_set_name
 print "Saving to: "+sum_M_data_path_local
 
 #Run the R script to mask A
-cmd = 'Rscript '+ds_config.source_dir+biobank_name+'/sum_M.R '
+cmd = 'Rscript '+biobank_name+'/sum_M.R '
 cmd += ds_config.data_dir+biobank_name+'/'+data_set_name+' '
 cmd += sum_M_data_path_local
 os.system(cmd)
@@ -41,6 +41,5 @@ else:
     #Copy the data to the remote client
     cmd = 'scp '+sum_M_data_path_local+' '+ds_config.remote_settings['client','username']+'@'+ds_config.remote_settings['client','ip_address']+':'+sum_M_data_path_remote
     print cmd
-    os.system(cmd)
 
 print "Finished summing "+data_set_name+"\n"
