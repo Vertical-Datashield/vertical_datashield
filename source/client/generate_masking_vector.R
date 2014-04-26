@@ -18,6 +18,7 @@ n=as.numeric(args[2])
 #This will make a vector of n*n length
 n_squared=n*n
 mask <- runif(n_squared, 1, 10)
+#mask <- diag(2)
 
 #Turn it into a nxn matrix
 dim(mask)<-c(n,n)
