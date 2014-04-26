@@ -56,6 +56,7 @@ rownames(cov.matrix) <- colnames(cov.matrix)
 cov.matrix=as.matrix(cov.matrix)
 
 print(cov.matrix)
+
 write.table(cov.matrix, row.names=TRUE, col.names=TRUE, sep=",", file = covariance_out_path)
 
 
