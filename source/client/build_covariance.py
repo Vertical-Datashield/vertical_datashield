@@ -23,7 +23,7 @@ M2M2_file_name='B.B.unmasked.csv'
 
 covariance_out_file_name='covariance_matrix.csv'
 
-print "Building the covariance matrix"
+print "Building the covariance matrix\n\n"
 
 #Build file paths
 M1M1_path = ds_config.temp_dir+'client/'+M1M1_file_name
@@ -51,4 +51,4 @@ cmd += numrows_path+' '
 cmd += covariance_out_path
 os.system(cmd)
 
-print "Finished building covariance matrix\n"
+print "\n\nFinished building covariance matrix\n"
