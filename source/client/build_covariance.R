@@ -21,10 +21,10 @@ covariance_out_path=args[8]
 #read files in
 ###########################################
 
-a.a<-read.csv(M1M1_path, header=FALSE)
-a.b<-read.csv(M1M2_path, header=FALSE)
-b.a<-read.csv(M2M1_path, header=FALSE)
-b.b<-read.csv(M2M2_path, header=FALSE)
+a.a<-read.csv(M1M1_path, header=TRUE)
+a.b<-read.csv(M1M2_path, header=TRUE)
+b.a<-read.csv(M2M1_path, header=TRUE)
+b.b<-read.csv(M2M2_path, header=TRUE)
 
 sum.a<-read.csv(sum_M1_path, header=FALSE)
 sum.b<-read.csv(sum_M2_path, header=FALSE)
@@ -36,27 +36,22 @@ numrows<-as.numeric(read.csv(numrows_path, header=FALSE))
 ###########################################
 
 #Get the sums together in a vector
-sums <- c(t(sum.a), t(sum.b))
+sums_vals <- c(t(sum.a), t(sum.b))
 
 #Join the various parts for the main matrix in columns
 aa.ab<-cbind(a.a, a.b)
 ba.bb<-cbind(b.a, b.b)
 
 #Join the rows. We are putting the sums at the top.
-cov.matrix<-rbind(sums,aa.ab, ba.bb)
-
-#print(cov.matrix)
+cov.matrix<-rbind(sums_vals,aa.ab, ba.bb)
 
 #Add the sums to the front col
 #stick a value in the first element
-temp <- c(numrows,sums)
-cov.matrix <- cbind(temp, cov.matrix)
+sums <- c(numrows,sums_vals)
+cov.matrix <- cbind(sums, cov.matrix)
 
-#rename stuff. This is a major hack.
-#columnname=c("sums","weight.c","age.c","ht.c","bmi.c")
-#rowname=c("sums","weight.c","age.c","ht.c","bmi.c")
-#colnames(cov.matrix) <- columnname
-#rownames(cov.matrix) <- rowname
+#rename the rows with the same names as the columns
+rownames(cov.matrix) <- colnames(cov.matrix)
 
 cov.matrix=as.matrix(cov.matrix)
 
