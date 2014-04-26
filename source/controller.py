@@ -26,10 +26,10 @@ import ds_config
 #Define the dataset names
 #data_A='height.csv'
 #data_B='weight.csv'
-#data_A='height_2.csv'
-#data_B='weight_2.csv'
-data_A='a.csv'
-data_B='b.csv'
+data_A='height_2.csv'
+data_B='weight_2.csv'
+#data_A='a.csv'
+#data_B='b.csv'
 
 
 print "\n###############################"
