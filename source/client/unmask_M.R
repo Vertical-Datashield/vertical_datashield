@@ -18,7 +18,7 @@ unmasked_matrix_out=args[3]
 #read files in
 ###########################################
 
-a<-read.csv(data_matrix_in, header=FALSE)
+a<-read.csv(data_matrix_in, header=TRUE)
 ma<-read.csv(masking_matrix_in, header=FALSE)
 
 #print (a)
@@ -37,6 +37,6 @@ unmasked_matrix<-solve(as.matrix(ma)) %*% as.matrix(a)
 # write AMa to file somewhere
 ###########################################
 #write.table(ama, row.names=FALSE, sep=",", file = output_ama)
-write.table(unmasked_matrix, row.names=FALSE, col.names=FALSE, sep=",", file = unmasked_matrix_out)
+write.table(unmasked_matrix, row.names=TRUE, col.names=TRUE, sep=",", file = unmasked_matrix_out)
 
 
