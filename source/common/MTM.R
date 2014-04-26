@@ -29,4 +29,4 @@ masked_ata <- v_m%*%ata
 ###########################################
 # write AMa to file somewhere
 ###########################################
-write.table(masked_ata, row.names=FALSE, col.names=FALSE, sep=",", file = matrix_out)
+write.table(masked_ata, row.names=TRUE, col.names=TRUE, sep=",", file = matrix_out)
