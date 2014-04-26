@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 #Olly Butters
-#12/4/14
+#25/4/14
 
 
 #Main controller for the whole thing.
@@ -106,8 +106,6 @@ print cmd
 os.system(cmd)
 
 
-
-
 #############################################################
 #Get ATA masked.
 #############################################################
@@ -134,10 +132,6 @@ os.system(cmd)
 #############################################################
 #Get the sum of each column
 #############################################################
-#subprocess.call([ds_config.source_dir+'A/sum_M.py','A',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
-#subprocess.call([ds_config.source_dir+'B/sum_M.py','B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
-
-
 remote_cmd = ds_config.source_dir+'A/sum_M.py A '+data_A+' A client'
 cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
 print cmd
@@ -148,7 +142,9 @@ cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_sett
 print cmd
 os.system(cmd)
 
+#############################################################
 #Get the number of rows in each
+#############################################################
 remote_cmd = ds_config.source_dir+'common/numrows.py A '+data_A+' A client'
 cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
 print cmd
@@ -178,9 +174,8 @@ subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.'
 subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.'+data_B+'.'+data_B,'B.B.unmasked.csv',ds_config.temp_dir+'client'])
 
 
-#Bind all the stuff together
-os.system('Rscript client/build_covariance.R')
-
+#Bind all the stuff together to make the covarianve matrix
+subprocess.call([ds_config.source_dir+'client/build_covariance.py','sum.'+data_A,'sum.'+data_B,'numrows.'+data_A])
 
 
 

@@ -4,32 +4,32 @@
 
 ##########################################
 #Read in the args. Im expecting
-#Masking matrix path
-#Matrix to be masked path
-#Output locaion
 ##########################################
-#args <- commandArgs(TRUE)
+args <- commandArgs(TRUE)
 
-#masking_matrix_in=args[1]
-#data_matrix_in=args[2]
-#unmasked_matrix_out=args[3]
-
-
+M1M1_path=args[1]
+M1M2_path=args[2]
+M2M1_path=args[3]
+M2M2_path=args[4]
+sum_M1_path=args[5]
+sum_M2_path=args[6]
+numrows_path=args[7]
+covariance_out_path=args[8]
 
 
 ###########################################
 #read files in
 ###########################################
 
-a.a<-read.csv('../temp/client/A.A.unmasked.csv', header=FALSE)
-a.b<-read.csv('../temp/client/A.B.unmasked.csv', header=FALSE)
-b.a<-read.csv('../temp/client/B.A.unmasked.csv', header=FALSE)
-b.b<-read.csv('../temp/client/B.B.unmasked.csv', header=FALSE)
+a.a<-read.csv(M1M1_path, header=FALSE)
+a.b<-read.csv(M1M2_path, header=FALSE)
+b.a<-read.csv(M2M1_path, header=FALSE)
+b.b<-read.csv(M2M2_path, header=FALSE)
 
-sum.a<-read.csv('../temp/client/sum.height_2.csv', header=FALSE)
-sum.b<-read.csv('../temp/client/sum.weight_2.csv', header=FALSE)
+sum.a<-read.csv(sum_M1_path, header=FALSE)
+sum.b<-read.csv(sum_M2_path, header=FALSE)
 
-numrows<-as.numeric(read.csv('../temp/client/numrows.weight_2.csv', header=FALSE))
+numrows<-as.numeric(read.csv(numrows_path, header=FALSE))
 
 ###########################################
 #Join them all up
@@ -61,7 +61,7 @@ rownames(cov.matrix) <- rowname
 cov.matrix=as.matrix(cov.matrix)
 
 print(cov.matrix)
-write.table(cov.matrix, row.names=TRUE, col.names=TRUE, sep=",", file = '../temp/client/covariance_out.csv')
+write.table(cov.matrix, row.names=TRUE, col.names=TRUE, sep=",", file = covariance_out_path)
 
 
 ###########################################
