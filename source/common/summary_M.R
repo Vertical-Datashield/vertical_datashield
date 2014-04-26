@@ -23,7 +23,10 @@ a<-read.csv(data_matrix_in, header=TRUE)
 
 num_rows <- nrow(a)
 num_cols <- ncol(a)
-summary=rbind(num_rows,num_cols)
+
+col_names <- colnames(a)
+
+summary=rbind(num_rows,num_cols,col_names)
 
 #print(sums)
 
