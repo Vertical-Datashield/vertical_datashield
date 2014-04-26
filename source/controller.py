@@ -26,8 +26,10 @@ import ds_config
 #Define the dataset names
 #data_A='height.csv'
 #data_B='weight.csv'
-data_A='height_2.csv'
-data_B='weight_2.csv'
+#data_A='height_2.csv'
+#data_B='weight_2.csv'
+data_A='a.csv'
+data_B='b.csv'
 
 
 print "\n###############################"
@@ -71,13 +73,13 @@ file_path=ds_config.temp_dir+'client/summary.'+data_A
 with open(file_path) as myfile:
     for line in myfile:
         name, var = line.partition(",")[::2]
-        summary['A',name.strip("\"")] = var
+        summary['A',name.strip("\"")] = var.strip()
 
 file_path=ds_config.temp_dir+'client/summary.'+data_B
 with open(file_path) as myfile:
     for line in myfile:
         name, var = line.partition(",")[::2]
-        summary['B',name.strip("\"")] = var
+        summary['B',name.strip("\"")] = var.strip()
 
 
 print summary
