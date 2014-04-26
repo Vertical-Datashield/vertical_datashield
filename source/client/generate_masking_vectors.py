@@ -40,7 +40,6 @@ if ds_config.local_only == True:
     shutil.copyfile(masking_vector_path_client,masking_vector_path_remote)
 else:
     #Do something
-    print "else"
     cmd = 'scp '+masking_vector_path_client+' '+ds_config.remote_settings[biobank_name,'username']+'@'+ds_config.remote_settings[biobank_name,'ip_address']+':'+masking_vector_path_remote
     print cmd
     os.system(cmd)
