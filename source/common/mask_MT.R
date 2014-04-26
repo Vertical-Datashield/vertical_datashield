@@ -19,7 +19,7 @@ masked_matrix_out=args[3]
 #read files in
 ###########################################
 
-a<-read.csv(data_matrix_in, header=FALSE)
+a<-read.csv(data_matrix_in, header=TRUE)
 ma<-read.csv(masking_matrix_in, header=FALSE)
 
 #print("in mask_MT.R")
