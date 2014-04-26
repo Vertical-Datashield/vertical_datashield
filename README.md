@@ -16,14 +16,14 @@ There is a bit of cheating going on here. The controller script runs code which 
 A note on nomenclature:
 
 Assuming two biobanks
-A=biobank A
-B=biobank B
-C=client
-M=general matrix
-M_A=matrix from A
-v=masking vector
-m_a=masking vector for A
-T=transpose e.g. AT
+- A=biobank A
+- B=biobank B
+- C=client
+- M=general matrix
+- M_A=matrix from A
+- v=masking vector
+- m_a=masking vector for A
+- T=transpose e.g. AT
 
 Deployment
 
