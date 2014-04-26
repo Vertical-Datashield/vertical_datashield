@@ -17,7 +17,7 @@ num_rows_out=args[2]
 #read files in
 ###########################################
 
-a<-read.csv(data_matrix_in, header=FALSE)
+a<-read.csv(data_matrix_in, header=TRUE)
 
 num_rows <- nrow(a) 
 
