@@ -35,4 +35,4 @@ ma_atb<-ma_at%*%b
 ###########################################
 # write AMa to file somewhere
 ###########################################
-write.table(ma_atb, row.names=TRUE, col.names=TRUE, sep=",", file = fn_ma_atb_out)
+write.table(ma_atb, row.names=FALSE, col.names=TRUE, sep=",", file = fn_ma_atb_out)
