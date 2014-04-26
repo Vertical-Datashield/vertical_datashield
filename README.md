@@ -29,3 +29,11 @@ Deployment
 
 - On each VM stick the source code
 - Add a temp/A or temp/B to A and B. The client makes this.
+- 
+
+Running it
+The main bit is the controller.py script. It is useful to see what files are being made etc on each VM, a good command for this is 
+
+watch -d ls -ltr temp/A
+
+etc
