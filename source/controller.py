@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+###########################################################################
 #Olly Butters
 #25/4/14
 
@@ -11,25 +12,39 @@
 #M=general matrix
 #T=transpose
 
-
 #A good way to see what is going on is to run
 #watch -d ls -ltr temp/A
 #etc on each VM, then you see the files being made and passed around.
+###########################################################################
 
+#Import the system libs
 import os
 import shutil
 import subprocess
 import time
 
+#Import local stuff
 import ds_config
 
+###########################################################################
+#User vars. These would probably come from the clients R script.
 #Define the dataset names
 #data_A='height.csv'
 #data_B='weight.csv'
-data_A='height_2.csv'
-data_B='weight_2.csv'
-#data_A='a.csv'
-#data_B='b.csv'
+
+
+#data_A='height_2.csv'
+#data_B='weight_2.csv'
+
+
+data_A='a.csv'
+data_B='b.csv'
+outcome_var='selfharm'
+explanatory_vars=['smoke','random1']
+
+
+###########################################################################
+
 
 
 print "\n###############################"
@@ -83,6 +98,19 @@ with open(file_path) as myfile:
 
 
 print summary
+
+
+#Output the outcome and explanatory vars
+f = open(ds_config.temp_dir+'client/outcome.csv', 'w')
+f.write('\"'+outcome_var+'\"\n')
+f.close
+
+f = open(ds_config.temp_dir+'client/explanatory_vars.csv', 'w')
+for this_var in explanatory_vars:
+    f.write('\"'+this_var+'\",')
+f.close
+
+
 
 #############################################################
 #Generate masking vector (v_A). This will copy to A. Do the same for v_B too.
@@ -197,12 +225,18 @@ os.system(cmd)
 #Unmask everything on the client
 #############################################################
 #height-weight first
-subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.'+data_A+'.v_A.'+data_B,'half_unmasked.csv',ds_config.temp_dir+'client'])
-subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','half_unmasked.csv','A.B.unmasked.csv',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.'+data_A+'.v_A.'+data_B,'half_unmasked.csv',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','half_unmasked.csv','A.B.unmasked.csv',ds_config.temp_dir+'client'])
+subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_B.'+data_A+'.v_A.'+data_B,'A.B.unmasked.csv',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','half_unmasked.csv','A.B.unmasked.csv',ds_config.temp_dir+'client'])
+
 
 #weight-height now
-subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.'+data_B+'.v_B.'+data_A,'half_unmasked.csv',ds_config.temp_dir+'client'])
-subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','half_unmasked.csv','B.A.unmasked.csv',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.'+data_B+'.v_B.'+data_A,'half_unmasked.csv',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','half_unmasked.csv','B.A.unmasked.csv',ds_config.temp_dir+'client'])
+subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_A.'+data_B+'.v_B.'+data_A,'B.A.unmasked.csv',ds_config.temp_dir+'client'])
+#subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','half_unmasked.csv','B.A.unmasked.csv',ds_config.temp_dir+'client'])
+
 
 #height-height
 subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_A','v_A.'+data_A+'.'+data_A,'A.A.unmasked.csv',ds_config.temp_dir+'client'])
@@ -213,6 +247,11 @@ subprocess.call([ds_config.source_dir+'client/unmask_M.py','client','v_B','v_B.'
 
 #Bind all the stuff together to make the covarianve matrix
 subprocess.call([ds_config.source_dir+'client/build_covariance.py','sum.'+data_A,'sum.'+data_B,'numrows.'+data_A])
+
+
+#Solve the GLM with the covariance matrix
+subprocess.call([ds_config.source_dir+'client/scalable_glm_cov_matrix.py'])
+
 
 
 
