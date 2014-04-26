@@ -53,10 +53,10 @@ temp <- c(numrows,sums)
 cov.matrix <- cbind(temp, cov.matrix)
 
 #rename stuff. This is a major hack.
-columnname=c("sums","weight.c","age.c","ht.c","bmi.c")
-rowname=c("sums","weight.c","age.c","ht.c","bmi.c")
-colnames(cov.matrix) <- columnname
-rownames(cov.matrix) <- rowname
+#columnname=c("sums","weight.c","age.c","ht.c","bmi.c")
+#rowname=c("sums","weight.c","age.c","ht.c","bmi.c")
+#colnames(cov.matrix) <- columnname
+#rownames(cov.matrix) <- rowname
 
 cov.matrix=as.matrix(cov.matrix)
 
@@ -72,29 +72,29 @@ write.table(cov.matrix, row.names=TRUE, col.names=TRUE, sep=",", file = covarian
 
 
 #ds.glm<-function(y,x){
-  x<-"ht.c"
-  y<-"weight.c"
+#  x<-"ht.c"
+#  y<-"weight.c"
 
-  const<-"sums"
+#  const<-"sums"
 
-  sumsrow<-which(rownames(cov.matrix) == const)
-  sumscol<-which(colnames(cov.matrix) == const)
-  ycol<-which(colnames(cov.matrix) == y)
-  yrow<-which(rownames(cov.matrix) == y)
-  xcol<-which(colnames(cov.matrix) == x)
-  xrow<-which(rownames(cov.matrix) == x)
+#  sumsrow<-which(rownames(cov.matrix) == const)
+#  sumscol<-which(colnames(cov.matrix) == const)
+#  ycol<-which(colnames(cov.matrix) == y)
+#  yrow<-which(rownames(cov.matrix) == y)
+#  xcol<-which(colnames(cov.matrix) == x)
+#  xrow<-which(rownames(cov.matrix) == x)
 
-  sums1<-cov.matrix[sumsrow,c(sumscol,xcol)]
-  xrows<-cov.matrix[xrow,c(sumscol,xcol)]
-  Y<-cov.matrix[yrow,c(sumscol,ycol)]
+#  sums1<-cov.matrix[sumsrow,c(sumscol,xcol)]
+#  xrows<-cov.matrix[xrow,c(sumscol,xcol)]
+#  Y<-cov.matrix[yrow,c(sumscol,ycol)]
 
-  xtx<-rbind(sums1, xrows)
-  rownames(xtx)<-c(const, x)
+#  xtx<-rbind(sums1, xrows)
+#  rownames(xtx)<-c(const, x)
 
 
 
-  X<-solve(xtx)
-  Y<-cov.matrix[yrow,c(sumscol,ycol)]
+#  X<-solve(xtx)
+#  Y<-cov.matrix[yrow,c(sumscol,ycol)]
 #print(X)
 #print(Y)
 
@@ -102,7 +102,7 @@ write.table(cov.matrix, row.names=TRUE, col.names=TRUE, sep=",", file = covarian
 #class(X)
 #class(Y)
 
-coeff<-X %*% Y
+#coeff<-X %*% Y
 #  print(coeff)
 #}
 

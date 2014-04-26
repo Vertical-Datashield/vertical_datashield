@@ -15,8 +15,9 @@ import ds_config
 #Get the params
 biobank_name = sys.argv[1]
 masking_vector_name = sys.argv[2]
-masking_vector_location_client = sys.argv[3]
-masking_vector_location_remote = sys.argv[4]
+number_of_cols = sys.argv[3]
+masking_vector_location_client = sys.argv[4]
+masking_vector_location_remote = sys.argv[5]
 
 print "Generating masking vector "+masking_vector_name
 
@@ -28,7 +29,7 @@ print "Saving to: " + masking_vector_path_client
 #Run the R script to make the masking vectors
 cmd = 'Rscript '+ds_config.source_dir+'client/generate_masking_vector.R '
 cmd += masking_vector_path_client+' '
-cmd += '2'
+cmd += number_of_cols
 os.system(cmd)
 
 #Build location where this will get saved remotely

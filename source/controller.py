@@ -24,6 +24,8 @@ import time
 import ds_config
 
 #Define the dataset names
+#data_A='height.csv'
+#data_B='weight.csv'
 data_A='height_2.csv'
 data_B='weight_2.csv'
 
@@ -48,11 +50,44 @@ print ds_config.data_dir
 print ds_config.temp_dir
 print '\n'
 
+
+#############################################################
+#Get the summaries of each data set. This would be a good
+#point to check if things are ok, e.g. same number of rows etc
+#############################################################
+remote_cmd = ds_config.source_dir+'common/summary_M.py A '+data_A+' A client'
+cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
+print cmd
+os.system(cmd)
+
+remote_cmd = ds_config.source_dir+'common/summary_M.py B '+data_B+' B client'
+cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
+print cmd
+os.system(cmd)
+
+#Grab the summary data from the files and store it locally
+summary = {}
+file_path=ds_config.temp_dir+'client/summary.'+data_A
+with open(file_path) as myfile:
+    for line in myfile:
+        name, var = line.partition(",")[::2]
+        summary['A',name.strip("\"")] = var
+
+file_path=ds_config.temp_dir+'client/summary.'+data_B
+with open(file_path) as myfile:
+    for line in myfile:
+        name, var = line.partition(",")[::2]
+        summary['B',name.strip("\"")] = var
+
+
+print summary
+
 #############################################################
 #Generate masking vector (v_A). This will copy to A. Do the same for v_B too.
+#############################################################
 #fn(masking_vector_name, where to store locally, where to copy to remotely)
-subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','A','v_A',ds_config.temp_dir+'client',ds_config.temp_dir+'A'])
-subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','B','v_B',ds_config.temp_dir+'client',ds_config.temp_dir+'B'])
+subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','A','v_A',summary['A','num_cols'],ds_config.temp_dir+'client',ds_config.temp_dir+'A'])
+subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','B','v_B',summary['B','num_cols'],ds_config.temp_dir+'client',ds_config.temp_dir+'B'])
 
 
 #############################################################
