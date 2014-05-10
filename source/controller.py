@@ -2,7 +2,7 @@
 
 ###########################################################################
 #Olly Butters
-#25/4/14
+#10/5/14
 
 
 #Main controller for the whole thing.
@@ -22,9 +22,13 @@ import os
 import shutil
 import subprocess
 import time
+import sys
 
 #Import local stuff
 import ds_config
+
+sys.path.append('common')
+from run_remote_cmd import run_remote_cmd
 
 ###########################################################################
 #User vars. These would probably come from the clients R script.
@@ -33,14 +37,16 @@ import ds_config
 #data_B='weight.csv'
 
 
-#data_A='height_2.csv'
-#data_B='weight_2.csv'
+data_A='height_2.csv'
+data_B='weight_2.csv'
+outcome_var='weight_2'
+explanatory_vars=['height','weight_1']
 
 
-data_A='a.csv'
-data_B='b.csv'
-outcome_var='selfharm'
-explanatory_vars=['smoke','random1']
+#data_A='a.csv'
+#data_B='b.csv'
+#outcome_var='selfharm'
+#explanatory_vars=['smoke','random1']
 
 
 ###########################################################################
@@ -50,14 +56,16 @@ explanatory_vars=['smoke','random1']
 print "\n###############################"
 print "Starting vertical datashield(!)\n"
 
+#############################################################
 #Get rid of the temp dirs if they exist on each VM
+#############################################################
 subprocess.call(ds_config.source_dir+'common/tidy_paths.py')
 cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+ds_config.source_dir+'common/tidy_paths.py'
 os.system(cmd)
 cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+ds_config.source_dir+'common/tidy_paths.py'
 os.system(cmd)
 
-#have a little nap to let the watch catch up
+#have a little nap to let the watch command catch up and show directories are empty
 time.sleep(4)
 
 #Top level root directory
@@ -100,7 +108,7 @@ with open(file_path) as myfile:
 print summary
 
 
-#Output the outcome and explanatory vars
+#Output the outcome and explanatory vars into a file
 f = open(ds_config.temp_dir+'client/outcome.csv', 'w')
 f.write('\"'+outcome_var+'\"\n')
 f.close
@@ -121,27 +129,19 @@ subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','B','
 
 
 #############################################################
-#Start with A.B M_A.TA
-
+#Calculate A.B
+#############################################################
 #On A multiply the masking vector by the data to get (AT.v_A)
 #fn(biobank name, masking vector name, data set name, where to store locally, where to copy to remotely) 
 #subprocess.call([ds_config.source_dir+"A/mask_MT.py",'A','v_A',data_A,'A','B'])
-
 remote_cmd = ds_config.source_dir+"common/mask_MT.py A v_A "+data_A+" A B"
-cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
-print cmd
-os.system(cmd)
-
-
+run_remote_cmd("A", remote_cmd)
 
 #On B multiply the masked vector by B.v_B, => AT.v_A.B.v_B
 #fn(biobank name, masking vector name, data from A, this data set name, where to store locally, where to copy to remotely)
 #subprocess.call([ds_config.source_dir+'B/masked_M1_times_M2.py','B', 'v_B',data_A+'.v_A',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
-
 remote_cmd = ds_config.source_dir+'common/masked_M1_times_M2.py B v_B '+data_A+'.v_A '+data_B+' B client'
-cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
-print cmd
-os.system(cmd)
+run_remote_cmd("B", remote_cmd)
 
 #############################################################
 
@@ -153,12 +153,8 @@ os.system(cmd)
 #fn(biobank name, masking vector name, data set name, where to store locally, where to copy to remotely) 
 #subprocess.call([ds_config.source_dir+'B/mask_MT.py','B','v_B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'A'])
 
-
 remote_cmd = ds_config.source_dir+"common/mask_MT.py B v_B "+data_B+" B A"
-cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
-print cmd
-os.system(cmd)
-
+run_remote_cmd("B", remote_cmd)
 
 #On A multiply the masked vector by A.M_A, => AT.M_A.B.M_B
 #fn(biobank name, masking vector name, data from A, this data set name, where to store locally, where to copy to remotely)
@@ -166,10 +162,7 @@ os.system(cmd)
 
 
 remote_cmd = ds_config.source_dir+'common/masked_M1_times_M2.py A v_A '+data_B+'.v_B '+data_A+' A client'
-cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
-print cmd
-os.system(cmd)
-
+run_remote_cmd("A", remote_cmd)
 
 #############################################################
 #Get ATA masked.
@@ -178,9 +171,7 @@ os.system(cmd)
 #subprocess.call([ds_config.source_dir+'A/MTM.py','A','v_A',data_A,'A','client'])
 
 remote_cmd = ds_config.source_dir+'common/MTM.py A v_A '+data_A+' A client'
-cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
-print cmd
-os.system(cmd)
+run_remote_cmd("A", remote_cmd)
 
 #############################################################
 #Get BTB masked.
@@ -188,38 +179,26 @@ os.system(cmd)
 #subprocess.call([ds_config.source_dir+'B/MTM.py','B','v_B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
 
 remote_cmd = ds_config.source_dir+'common/MTM.py B v_B '+data_B+' A client'
-cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
-print cmd
-os.system(cmd)
-
+run_remote_cmd("B", remote_cmd)
 
 
 #############################################################
 #Get the sum of each column
 #############################################################
 remote_cmd = ds_config.source_dir+'common/sum_M.py A '+data_A+' A client'
-cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
-print cmd
-os.system(cmd)
+run_remote_cmd("A", remote_cmd)
 
 remote_cmd = ds_config.source_dir+'common/sum_M.py B '+data_B+' B client'
-cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
-print cmd
-os.system(cmd)
+run_remote_cmd("B", remote_cmd)
 
 #############################################################
 #Get the number of rows in each
 #############################################################
 remote_cmd = ds_config.source_dir+'common/numrows.py A '+data_A+' A client'
-cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
-print cmd
-os.system(cmd)
+run_remote_cmd("A", remote_cmd)
 
 remote_cmd = ds_config.source_dir+'common/numrows.py B '+data_B+' B client'
-cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
-print cmd
-os.system(cmd)
-
+run_remote_cmd("B", remote_cmd)
 
 #############################################################
 #Unmask everything on the client
