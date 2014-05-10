@@ -9,35 +9,17 @@ print(input_cov_matrix)
 print(input_x)
 print(input_y)
 
-#fn_cov_matrix_in="cov_matrix.csv"
-#fn_x_in="x_variables.csv"
-#fn_y_in="y_variable.csv"
-#fn_coeffs_out="coeffs.csv"
-
-#loc_cov_matrix_in="/home/rw13742/Documents/datashield/testing/vertical_comms/data/"
-
-#loc_coeffs_out="/home/rw13742/Documents/datashield/testing/vertical_comms/data/"
-
-#########################################
-# set input and outputfiles 
-#########################################
-
-#input_cov_matrix=sprintf("%s%s", loc_cov_matrix_in, fn_cov_matrix_in)
-#input_x=sprintf("%s%s", loc_cov_matrix_in, fn_x_in)
-#input_y=sprintf("%s%s", loc_cov_matrix_in, fn_y_in)
-
-#output_coeffs=sprintf("%s%s", loc_coeffs_out, fn_coeffs_out)
-
 ###########################################
 #read files in
 ###########################################
-
 cov.matrix<-as.matrix(read.csv(input_cov_matrix, header=TRUE))
 print(cov.matrix)
-x<-as.matrix(read.csv(input_x, header=FALSE))
+#x<-as.matrix(read.csv(input_x, header=FALSE))
+x<-read.csv(input_x, header=FALSE)
 print(x)
 
-y<-as.matrix(read.csv(input_y, header=FALSE))
+#y<-as.matrix(read.csv(input_y, header=FALSE))
+y<-read.csv(input_y, header=FALSE)
 print(y)
 class(y)
 dim(y)
