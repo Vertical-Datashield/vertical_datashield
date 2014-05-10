@@ -113,9 +113,10 @@ f = open(ds_config.temp_dir+'client/outcome.csv', 'w')
 f.write('\"'+outcome_var+'\"\n')
 f.close
 
+temp=",".join("\""+this_var+"\"" for this_var in explanatory_vars)
+temp+='\n'
 f = open(ds_config.temp_dir+'client/explanatory_vars.csv', 'w')
-for this_var in explanatory_vars:
-    f.write('\"'+this_var+'\",')
+f.write(temp)
 f.close
 
 
