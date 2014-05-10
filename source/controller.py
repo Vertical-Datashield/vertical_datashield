@@ -127,7 +127,7 @@ subprocess.call([ds_config.source_dir+'client/generate_masking_vectors.py','B','
 #fn(biobank name, masking vector name, data set name, where to store locally, where to copy to remotely) 
 #subprocess.call([ds_config.source_dir+"A/mask_MT.py",'A','v_A',data_A,'A','B'])
 
-remote_cmd = ds_config.source_dir+"A/mask_MT.py A v_A "+data_A+" A B"
+remote_cmd = ds_config.source_dir+"common/mask_MT.py A v_A "+data_A+" A B"
 cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
 print cmd
 os.system(cmd)
@@ -138,7 +138,7 @@ os.system(cmd)
 #fn(biobank name, masking vector name, data from A, this data set name, where to store locally, where to copy to remotely)
 #subprocess.call([ds_config.source_dir+'B/masked_M1_times_M2.py','B', 'v_B',data_A+'.v_A',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
 
-remote_cmd = ds_config.source_dir+'B/masked_M1_times_M2.py B v_B '+data_A+'.v_A '+data_B+' B client'
+remote_cmd = ds_config.source_dir+'common/masked_M1_times_M2.py B v_B '+data_A+'.v_A '+data_B+' B client'
 cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
 print cmd
 os.system(cmd)
@@ -154,7 +154,7 @@ os.system(cmd)
 #subprocess.call([ds_config.source_dir+'B/mask_MT.py','B','v_B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'A'])
 
 
-remote_cmd = ds_config.source_dir+"B/mask_MT.py B v_B "+data_B+" B A"
+remote_cmd = ds_config.source_dir+"common/mask_MT.py B v_B "+data_B+" B A"
 cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
 print cmd
 os.system(cmd)
@@ -165,7 +165,7 @@ os.system(cmd)
 #subprocess.call([ds_config.source_dir+'A/masked_M1_times_M2.py','A', 'v_A',data_B+'.v_B',data_A,ds_config.temp_dir+'A',ds_config.temp_dir+'client'])
 
 
-remote_cmd = ds_config.source_dir+'A/masked_M1_times_M2.py A v_A '+data_B+'.v_B '+data_A+' A client'
+remote_cmd = ds_config.source_dir+'common/masked_M1_times_M2.py A v_A '+data_B+'.v_B '+data_A+' A client'
 cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
 print cmd
 os.system(cmd)
@@ -177,7 +177,7 @@ os.system(cmd)
 #fn(biobank name, masking vector name, data set name, where to store locally, where to copy to remotely)
 #subprocess.call([ds_config.source_dir+'A/MTM.py','A','v_A',data_A,'A','client'])
 
-remote_cmd = ds_config.source_dir+'A/MTM.py A v_A '+data_A+' A client'
+remote_cmd = ds_config.source_dir+'common/MTM.py A v_A '+data_A+' A client'
 cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
 print cmd
 os.system(cmd)
@@ -187,7 +187,7 @@ os.system(cmd)
 #############################################################
 #subprocess.call([ds_config.source_dir+'B/MTM.py','B','v_B',data_B,ds_config.temp_dir+'B',ds_config.temp_dir+'client'])
 
-remote_cmd = ds_config.source_dir+'B/MTM.py B v_B '+data_B+' A client'
+remote_cmd = ds_config.source_dir+'common/MTM.py B v_B '+data_B+' A client'
 cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
 print cmd
 os.system(cmd)
@@ -197,12 +197,12 @@ os.system(cmd)
 #############################################################
 #Get the sum of each column
 #############################################################
-remote_cmd = ds_config.source_dir+'A/sum_M.py A '+data_A+' A client'
+remote_cmd = ds_config.source_dir+'common/sum_M.py A '+data_A+' A client'
 cmd = 'ssh '+ds_config.remote_settings['A','username']+'@'+ds_config.remote_settings['A','ip_address']+' '+remote_cmd
 print cmd
 os.system(cmd)
 
-remote_cmd = ds_config.source_dir+'B/sum_M.py B '+data_B+' B client'
+remote_cmd = ds_config.source_dir+'common/sum_M.py B '+data_B+' B client'
 cmd = 'ssh '+ds_config.remote_settings['B','username']+'@'+ds_config.remote_settings['B','ip_address']+' '+remote_cmd
 print cmd
 os.system(cmd)

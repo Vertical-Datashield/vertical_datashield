@@ -1,1 +1,0 @@
-../common/mask_MT.py
