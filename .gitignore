@@ -1,5 +1,5 @@
 #The generated config file
-ds_config.pyc
+*.pyc
 
 #All temporary files
 *.*~
