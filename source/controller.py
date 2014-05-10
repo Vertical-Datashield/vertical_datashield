@@ -40,7 +40,7 @@ from run_remote_cmd import run_remote_cmd
 data_A='height_2.csv'
 data_B='weight_2.csv'
 outcome_var='weight_2'
-explanatory_vars=['height','weight_1']
+explanatory_vars=['height','weight']
 
 
 #data_A='a.csv'
