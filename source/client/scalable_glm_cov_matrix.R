@@ -14,12 +14,12 @@ print(input_y)
 ###########################################
 cov.matrix<-as.matrix(read.csv(input_cov_matrix, header=TRUE))
 print(cov.matrix)
-#x<-as.matrix(read.csv(input_x, header=FALSE))
-x<-read.csv(input_x, header=FALSE)
+x<-as.matrix(read.csv(input_x, header=FALSE))
+#x<-read.csv(input_x, header=FALSE)
 print(x)
 
-#y<-as.matrix(read.csv(input_y, header=FALSE))
-y<-read.csv(input_y, header=FALSE)
+y<-as.matrix(read.csv(input_y, header=FALSE))
+#y<-read.csv(input_y, header=FALSE)
 print(y)
 class(y)
 dim(y)
@@ -46,6 +46,7 @@ xcol<-rep(NA, length(x))
 xrow<-rep(NA, length(x))
 
 for (i in 1:length(x)){
+print(x[i])
 xcol[i]<-which(colnames(cov.matrix) == x[i])
 xrow[i]<-which(rownames(cov.matrix) == x[i])
 }
