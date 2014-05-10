@@ -1,0 +1,10 @@
+#The generated config file
+ds_config.pyc
+
+#All temporary files
+*.*~
+
+#The temp dir
+temp/
+
+
